@@ -41,7 +41,7 @@ class FlyerDataExtractor:
                 f"{start_date_raw}{end_date.year}", "%d.%m.%Y"
             )
             return start_date.isoformat(), end_date.isoformat()
-        return dates[0], ""
+        return dates[0].strip(), ""
     
     def _polish_thumbnail_src(self, src: str) -> str: 
         jpg_extension_index = src.find(".jpg")
