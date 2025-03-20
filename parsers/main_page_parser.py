@@ -1,4 +1,4 @@
-from .page_scraper import PageParser
+from .page_parser import PageParser
 from selectolax.parser import HTMLParser
 
 
