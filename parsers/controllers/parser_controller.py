@@ -9,7 +9,13 @@ from parsers.detail_page_parser import DetailPageParser
 
 
 class ParserController:
-    def __init__(self, base_url: str="https://www.prospektmaschine.de/", category: str="hypermarkte/", fetcher_timeout: int=10, verbose=False, logger: logging.Logger=None):
+    def __init__(
+            self, 
+            base_url: str="https://www.prospektmaschine.de/", 
+            category: str="hypermarkte/", 
+            fetcher_timeout: int=10, 
+            verbose=False, 
+            logger: logging.Logger=None):
         self.logger = logger
         self.verbose = verbose 
         self.base_url = base_url
