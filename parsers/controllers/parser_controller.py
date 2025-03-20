@@ -7,10 +7,13 @@ from fetchers.fetcher import Fetcher
 from parsers.main_page_parser import MainPageParser
 from parsers.detail_page_parser import DetailPageParser
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class ParserController:
     def __init__(self, base_url: str="https://www.prospektmaschine.de/", category: str="hypermarkte/", fetcher_timeout: int=10, verbose=False):
+        level = logging.INFO if verbose else logging.WARNING
+        logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
+        logging.getLogger("fetchers.fetcher").setLevel(logging.INFO if verbose else logging.WARNING)
+        logging.getLogger("httpx").setLevel(logging.INFO if verbose else logging.WARNING)
         self.verbose = verbose 
         self.base_url = base_url
         self.category = category

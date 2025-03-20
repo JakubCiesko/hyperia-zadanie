@@ -51,9 +51,7 @@ async def main():
         fetcher_timeout=args.fetcher_timeout,
         verbose=args.verbose
     )
-
     # allow nested event loops
-
     nest_asyncio.apply()
     await parser_controller.process()
     parser_controller.save_output(args.output)
