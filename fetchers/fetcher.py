@@ -1,9 +1,11 @@
 import httpx
 import asyncio
+import logging
 
 class Fetcher:
-    def __init__(self, timeout:int=10):
+    def __init__(self, timeout:int=10, logger: logging.Logger = None):
         self._timeout = timeout
+        self.logger = logger
 
     def set_timeout(self, timeout:int):
         self._timeout = timeout
@@ -27,7 +29,7 @@ class Fetcher:
             response.raise_for_status()
             return response.text
         except httpx.HTTPStatusError as e:
-            print(f"{e}")
+            self.logger.error(f"HTTP error fetching {url}: {e}")
         except httpx.RequestError as e:
-            print(f"{e}")
+            self.logger.error(f"Request error fetching {url}: {e}")
         return ""
