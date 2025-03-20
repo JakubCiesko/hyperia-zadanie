@@ -10,14 +10,12 @@ class FlyerDataExtractor:
         if isinstance(fliers, Node):
             fliers = [fliers]
         return [self._extract_flyer_info(flyer, shop_name) for flyer in fliers]
-        
 
     def _extract_flyer_info(self, flyer: Node, shop_name:str) -> FlyerData:
         flyer_contents = flyer.css_first(".letak-description").css(".grid-item-content") 
         if flyer_contents:
-            flyer_thumbnail = self._polish_thumbnail_src(
-                flyer.css_first("picture img").attributes.get("src")
-            ) # need to fetch better image quality by clicking the <a> tag...
+            thumbnail_node = flyer.css_first("picture img")
+            flyer_thumbnail = self._get_thumbnail_src(thumbnail_node) # need to fetch better image quality by clicking the <a> tag...
             from_to_date = flyer_contents[1].css_first(".visible-sm").text(strip=True)
             valid_from, valid_to = self._parse_dates(from_to_date)
             title = flyer_contents[0].text(strip=True)
@@ -43,6 +41,12 @@ class FlyerDataExtractor:
             return start_date.isoformat(), end_date.isoformat()
         return dates[0].strip(), ""
     
+    def _get_thumbnail_src(self, thumbnail_node: Node) -> str:
+        thumbnail_src = thumbnail_node.attributes.get("src")
+        thumbnail_data_src = thumbnail_node.attributes.get("data-src")
+        src = thumbnail_src or thumbnail_data_src
+        return src or ""
+
     def _polish_thumbnail_src(self, src: str) -> str: 
         if src:
             jpg_extension_index = src.find(".jpg")
