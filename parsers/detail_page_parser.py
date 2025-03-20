@@ -1,4 +1,4 @@
-from .page_scraper import PageParser
+from .page_parser import PageParser
 from models.flyer_data import FlyerData
 from selectolax.parser import HTMLParser
 from extractors.extractor import FlyerDataExtractor
@@ -28,5 +28,12 @@ class DetailPageParser(PageParser):
         tree = HTMLParser(html_string)
         grid_with_fliers = tree.css_first(".letaky-grid")
         fliers = grid_with_fliers.css(".brochure-thumb")
-        flier_data_extractor = self.get_extractor()
+        flier_data_extractor = self.get_data_extractor()
+        return flier_data_extractor.extract(fliers, shop_name=self.get_shop_name())
+
+    async def async_parse(self, html_string: str):
+        tree = HTMLParser(html_string)
+        grid_with_fliers = tree.css_first(".letaky-grid")
+        fliers = grid_with_fliers.css(".brochure-thumb")
+        flier_data_extractor = self.get_data_extractor()
         return flier_data_extractor.extract(fliers, shop_name=self.get_shop_name())

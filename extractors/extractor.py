@@ -44,6 +44,8 @@ class FlyerDataExtractor:
         return dates[0].strip(), ""
     
     def _polish_thumbnail_src(self, src: str) -> str: 
-        jpg_extension_index = src.find(".jpg")
-        src = src[:jpg_extension_index] if jpg_extension_index >= 0 else src 
-        return src
+        if src:
+            jpg_extension_index = src.find(".jpg")
+            src = src[:jpg_extension_index] if jpg_extension_index >= 0 else src 
+            return src
+        return ""

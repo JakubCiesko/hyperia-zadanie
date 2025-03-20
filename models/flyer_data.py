@@ -1,6 +1,6 @@
+import json
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
-import json
 
 @dataclass
 class FlyerData:

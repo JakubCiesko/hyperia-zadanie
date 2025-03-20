@@ -1,23 +1,15 @@
 import os
-import argparse
-import logging
 import asyncio
-from fetchers.fetcher import Fetcher
-from parsers.main_page_parser import MainPageParser
-from parsers.detail_page_parser import DetailPageParser
+import argparse
+import nest_asyncio
 from parsers.controllers.parser_controller import ParserController
 
 current_dir = os.path.dirname(__file__)
 data_dir = os.path.join(current_dir, "data")
 
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
-
-def main():
+async def main():
+    # CLI interface 
     parser = argparse.ArgumentParser(description="Scrape flyers from prospektmaschine.de")
-    
-    # CLI Arguments
     parser.add_argument(
         "--category",
         type=str,
@@ -27,26 +19,45 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default=os.path.join(data_dir,"data/output.json"),
+        default=os.path.join(data_dir, "output.json"),
         help="Specify the output JSON file path",
+    )
+    parser.add_argument(
+        "--base_url", 
+        type=str, 
+        default="https://www.prospektmaschine.de/",
+        help="Specify base url to be prepended to urls (default: 'https://www.prospektmaschine.de/')"
+    )
+    parser.add_argument(
+        "--fetcher_timeout", 
+        type=int, 
+        default=10,
+        help="Specify timeout for Fetcher class (default: 10)"
+    )
+    parser.add_argument(
+        "--verbose", 
+        type=bool, 
+        default=False,
+        help="Verbosity (default: False)"
     )
 
     args = parser.parse_args()
+    args.category += "/" if args.category[-1] != "/" else ""
+    args.base_url += "/" if args.base_url[-1] != "/" else ""
+    
+    parser_controller = ParserController(
+        base_url=args.base_url,
+        category=args.category, 
+        fetcher_timeout=args.fetcher_timeout,
+        verbose=args.verbose
+    )
 
-    base_url = "https://www.prospektmaschine.de/"
-    logging.info(f"Starting scraper for category: {args.category}")
-    
-    #fetcher = Fetcher()
-    #main_page_parser = MainPageParser(base_url=base_url)
-    
-    #shop_links = asyncio.run(fetcher.fetch())
-    ParserController(base_url)
+    # allow nested event loops
 
-    
-    
-    
-    logging.info(f"Scraping completed! Data saved to {args.output}")
+    nest_asyncio.apply()
+    await parser_controller.process()
+    parser_controller.save_output(args.output)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
