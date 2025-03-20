@@ -42,7 +42,7 @@ class FlyerDataExtractor:
         return dates[0].strip(), ""
     
     def _get_thumbnail_src(self, thumbnail_node: Node) -> str:
-        thumbnail_src = thumbnail_node.attributes.get("src")
+        thumbnail_src = thumbnail_node.attributes.get("src") # need to account for thumbnails of better quality
         thumbnail_data_src = thumbnail_node.attributes.get("data-src")
         src = thumbnail_src or thumbnail_data_src
         return src or ""
