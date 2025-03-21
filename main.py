@@ -8,6 +8,30 @@ current_dir = os.path.dirname(__file__)
 data_dir = os.path.join(current_dir, "data")
 
 async def main():
+    """
+    Main entry point for the flyer scraping application.
+
+    This function sets up the command-line interface (CLI) using argparse to accept 
+    user inputs for category, output file path, base URL, fetcher timeout, verbosity, 
+    and log file. It configures logging settings, initializes the `ParserController` 
+    for fetching and parsing data, and saves the processed output to a specified 
+    file in JSON format.
+
+    The flow of the function is as follows:
+        1. Parse command-line arguments.
+        2. Configure logging based on verbosity and log file options.
+        3. Initialize the `ParserController` with provided settings.
+        4. Call `ParserController.process()` to fetch and parse data.
+        5. Save the parsed data using `ParserController.save_output()`.
+
+    Command-line arguments:
+        --category (str): The category to scrape (default is "hypermarkte").
+        --output (str): The output file path for saving the parsed data (default is 'data/output.json').
+        --base_url (str): The base URL to scrape from (default is 'https://www.prospektmaschine.de/').
+        --fetcher_timeout (int): Timeout for fetcher requests (default is 10).
+        --verbose (bool): Flag to enable verbose logging (default is False).
+        --log_file (str): Path to the log file (default is None, meaning logs are printed to the console).
+    """
 
     # CLI interface 
     parser = argparse.ArgumentParser(description="Scrape flyers from prospektmaschine.de")
