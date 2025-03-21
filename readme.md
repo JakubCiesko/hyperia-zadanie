@@ -40,3 +40,7 @@ python main.py --category "hypermarkte" --output "data/output.json" --base_url "
 
 
 ```--log_file```: Specifies path to logfile to print logs instead of printing them straight in CLI.
+
+
+## Use of AI: 
+The code was written by me. AI was used solely for doc-string and readme.md writing which was then checked by me (human).
